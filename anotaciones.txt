@@ -1,0 +1,96 @@
+1. Se descarga el Zend Framework.
+2. Lo puse en la raiz del htdocs C:\AMPP\htdocs\ZendFramework
+3. Agregue en varibles de entorno de windows C:\AMPP\htdocs\ZendFramework\bin\zf.bat y a la variable PATH le agregue ;C:\AMPP\php
+4. Luego se crea un folder "nombre" y se accede a él por linea de comandos, se ejecuta entonces:
+	C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend>c:\AMPP\htdocs\ZendFramework\bin\zf.bat create project mi_proyecto_crud
+5. Se genera en el folder "nombre" un proyecto con el nombre "mi_proyecto_crud"
+	|_application
+	|_docs
+	|_library
+	|_public
+	|_test
+6. Ahora ve al directorio de ZendFramework (si, ese que descargaste y descomprimiste) y copia el directorio llamado “Zend” 
+   que está dentro de “library” y lo pegas dentro del “library” "C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\mi_proyecto_crud\library\Zend".
+7. Informacion de carpeta:
+    |_public es el directorio al que deberías ingresar a través del navegador. El index.php se encarga de toda la “magia”
+    |_application como ya te imaginaras es en donde “vive” todo el código de tu proyecto.
+    |_application/Bootstrap.php es el motor de arranque y es quien dice que componentes se inician.
+    |_application/configs/application.ini tiene la configuración de tu aplicación, por ejemplo la configuración de errores.
+    |_application/controllers encontramos los controladores de tu programa.
+	|_application/views/scripts/ están nuestras vistas.
+	|_application/models los modelos.
+8. Se crean controllers de prueba:(C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\mi_proyecto_crud>C:\AMPP\htdocs\ZendFramework\bin\zf.bat create controller usuario)
+	C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\mi_proyecto_crud>c:\AMPP\htdocs\ZendFramework\bin\zf.bat create controller hello
+	C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\mi_proyecto_crud>c:\AMPP\htdocs\ZendFramework\bin\zf.bat create action spanish hello
+	C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\mi_proyecto_crud>c:\AMPP\htdocs\ZendFramework\bin\zf.bat create action english hello
+	°Con mod_rewrite activado 	http://localhost/Help/Herramientas/otros/FrameworksCrud/Zend/mi_proyecto_crud/public/Hello/
+								http://localhost/Help/Herramientas/otros/FrameworksCrud/Zend/mi_proyecto_crud/public/Hello/spanish
+								http://localhost/Help/Herramientas/otros/FrameworksCrud/Zend/mi_proyecto_crud/public/Hello/english
+	°Sin mod_rewrite activado http://localhost/Help/Herramientas/otros/FrameworksCrud/Zend/mi_proyecto_crud/public/index.php/Hello/
+9. Tomado hasta aca de http://www.kickbill.com/?p=1443
+
+10. Para no ver la carpeta public se debe configurar el archivo host
+		127.0.0.1		localhost.zf-crud
+Donde "localhost.zf-crud" debe ser el nombre que lleva el site en la configuracion del archivo de vhosts de apache asi:
+
+#
+# Use name-based virtual hosting.
+#
+NameVirtualHost *:80 //uncomment this line
+
+#localhost
+<VirtualHost *:80>
+DocumentRoot "C:/AMPP/htdocs"
+ServerName localhost:80
+</VirtualHost> 
+
+#localhost
+<VirtualHost *:80>
+DocumentRoot "C:/AMPP/htdocs/Help/Herramientas/otros/FrameworksCrud/Zend/mi_proyecto_crud/public"
+ServerName localhost.zf-crud
+</VirtualHost>
+
+11. Manejo de layout
+	Se agrega la linea => resources.layout.layoutpath = APPLICATION_PATH "/layouts"
+	en el archivo application.ini
+	y en el codigo de configura el archivo Bootstrap.php que se encuentra en la carpeta application:
+	
+	  protected function _initAutoload() 
+     { 
+          $moduleLoader = new Zend_Application_Module_Autoloader(array( 
+               'namespace' => '', 
+               'basePath' => APPLICATION_PATH)); 
+          return $moduleLoader; 
+     } 
+     
+	function _initViewHelpers() 
+    { 
+       $this->bootstrap('layout'); 
+       $layout = $this->getResource('layout'); 
+       $view = $layout->getView(); 
+       $view->doctype('XHTML1_STRICT'); 
+       $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8'); 
+       $view->headTitle()->setSeparator(' - '); 
+       $view->headTitle('Primeros pasos en Zend Framework'); 
+    }
+
+12. Si en el controller se desea usar otro layout diferente se debe agregar 
+	 $options = array(  
+          'layout'   => 'internas',  
+        );
+        Zend_Layout::startMvc($options);
+		
+
+OTRA NEW
+		
+C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\crud_prueba>C:\AMPP\htdocs\ZendFramework\bin\zf.bat create project crud_prueba
+
+C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\crud_prueba>C:\AMPP\htdocs\ZendFramework\bin\zf.bat create module default
+
+C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\crud_prueba>C:\AMPP\htdocs\ZendFramework\bin\zf.bat create module admin
+
+C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\crud_prueba>C:\AMPP\htdocs\ZendFramework\bin\zf.bat create controller index index-action-included[=1] default
+
+C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\crud_prueba>C:\AMPP\htdocs\ZendFramework\bin\zf.bat create controller usuario index-action-included[=1] admin
+
+C:\AMPP\htdocs\Help\Herramientas\otros\FrameworksCrud\Zend\crud_prueba>C:\AMPP\htdocs\ZendFramework\bin\zf.bat create model usuario admin

@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteRule .* index.php
+RewriteRule !\.(js|css|ico|gif|jpg|png)$ index.php
+php_flag magic_quotes_gpc off
+php_flag register_globals off
